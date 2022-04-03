@@ -1,5 +1,12 @@
 --@name EGP v3
 --@client
+local WireEGP_50_WireGPU_ConsoleFont = render.createFont(
+	'WireGPU_ConsoleFont', -- not a valid font name i'm pretty sure, but it's what egp actually does so
+	50, -- this is meant to specified in tbl, but cba to do it that way
+	800,
+	true,
+	false
+) -- https://github.com/wiremod/wire/blob/a031e4d/lua/entities/gmod_wire_egp/lib/objects/text.lua#L43
 local mat = material.load
 local tbl = {
 	{
@@ -32,7 +39,7 @@ local tbl = {
 			a = 255
 		}
 	},
-}
+} -- https://github.com/wiremod/wire/blob/a031e4d/lua/entities/gmod_wire_egp/lib/egplib/objectcontrol.lua#L248
 local mtx = Matrix()
 local scale = Vector(1, 1)
 hook.add('render', '', function()
@@ -47,7 +54,7 @@ hook.add('render', '', function()
 		render.setRGBA(t1s.r, t1s.g, t1s.b, t1s.a)
 		render.drawTexturedRect(t1s.x-t1s.w/2, t1s.y-t1s.h/2, t1s.w, t1s.h)
 		local t2s = tbl[2].Settings
-		pcall(render.setFont, t2s.font)
+		render.setFont(WireEGP_50_WireGPU_ConsoleFont)
 		render.setRGBA(t2s.r, t2s.g, t2s.b, t2s.a)
 		render.drawSimpleText(t2s.x, t2s.y, t2s.text, t2s.halign, t2s.valign)
 	render.popMatrix()
