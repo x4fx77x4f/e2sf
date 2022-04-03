@@ -38,7 +38,7 @@ return function(instance, env)
 	end
 	--function env.sunDirection() end
 	function env.setMass(mass)
-		return self.entity:setMass(math.clamp(mass, 0.001, 50000))
+		return instance.entity:setMass(math.clamp(mass, 0.001, 50000))
 	end
 	
 	function entity_methods:id()
@@ -152,7 +152,7 @@ return function(instance, env)
 	end
 	function entity_methods:setBodygroup(bodygroup, value)
 		self = getent(self)
-		if self:getOwner() ~= self.owner then
+		if self:getOwner() ~= instance.owner then
 			error("You do not own this entity!", 2)
 		end
 		self:setBodygroup(bodygroup, value)
@@ -180,7 +180,7 @@ return function(instance, env)
 	--function entity_methods:inertia() end
 	function entity_methods:lockPod(lock)
 		self = getent(self)
-		if self:getOwner() ~= self.owner then
+		if self:getOwner() ~= instance.owner then
 			error("You do not own this entity!", 2)
 		end
 		if lock ~= 0 then
@@ -191,21 +191,21 @@ return function(instance, env)
 	end
 	function entity_methods:killPod()
 		self = getent(self)
-		if self:getOwner() ~= self.owner then
+		if self:getOwner() ~= instance.owner then
 			error("You do not own this entity!", 2)
 		end
 		self:killDriver()
 	end
 	function entity_methods:ejectPod()
 		self = getent(self)
-		if self:getOwner() ~= self.owner then
+		if self:getOwner() ~= instance.owner then
 			error("You do not own this entity!", 2)
 		end
 		self:ejectDriver()
 	end
 	function entity_methods:podStripWeapons()
 		self = getent(self)
-		if self:getOwner() ~= self.owner then
+		if self:getOwner() ~= instance.owner then
 			error("You do not own this entity!", 2)
 		end
 		local driver = self:getDriver()
@@ -227,7 +227,7 @@ return function(instance, env)
 	--function entity_methods:aabbWorldSize() end
 	--function entity_methods:driver() end
 	--function entity_methods:passenger() end
-	entity_methods.tostring = entity_meta.__tostring
+	entity_methods.toString = entity_meta.__tostring
 	--function entity_methods:removeTrails() end
 	--function entity_methods:setTrails(startSize, endSize, length, material, color, alpha, attachmentID, additive) end
 	function entity_methods:lookupAttachment(name)
