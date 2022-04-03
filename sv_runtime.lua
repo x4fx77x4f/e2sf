@@ -121,7 +121,7 @@ function runtime:build_environment()
 	
 	return env
 end
-function runtime:build_persist_defaults(tbl)
+function runtime:setup_persist_defaults(tbl)
 	local env = self.env
 	for k, vt in pairs(tbl) do
 		local v
@@ -134,6 +134,20 @@ function runtime:build_persist_defaults(tbl)
 		end
 		self.env[k] = v
 	end
+end
+function runtime:setup_inputs(inputs)
+	self.inputs = inputs
+	wire.adjustPorts(inputs, nil)
+end
+function runtime:setup_inputs_fake(inputs)
+	self.inputs_fake = inputs
+end
+function runtime:setup_outputs(outputs)
+	self.outputs = outputs
+	wire.adjustPorts(nil, outputs)
+end
+function runtime:setup_outputs_fake(outputs)
+	return self:setup_persist_defaults(outputs)
 end
 
 function runtime:compile(path, func, main)
@@ -169,14 +183,25 @@ function runtime:run(func, ...)
 	return unpack(retvals)
 end
 function runtime:run_main()
-	return self:run(self.includes[self.mainfile])
+	local ports = wire.ports
+	for k, vt in pairs(self.inputs) do
+		local v = ports[k]
+		assert(v, vt)
+		if vt ~= 'number' and vt ~= 'string' then
+			v = self:wrap(v, self.types[vt])
+		end
+		rawset(self.env, k, v)
+	end
+	local success = self:run(self.includes[self.mainfile])
+	return success
 end
 function runtime:run_clk(name)
 	local data = self.clk[name]
 	if data._enabled then
 		data._running = true
-		self:run_main()
+		local success = self:run_main()
 		data._running = false
+		return success
 	end
 end
 function runtime:run_first()

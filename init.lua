@@ -3,7 +3,7 @@
 --@include ./cl_init.lua
 --@clientmain ./cl_init.lua
 
-timer.simple(0, function() -- Work around https://github.com/thegrb93/StarfallEx/issues/1295
+xpcall(function() -- Work around https://github.com/thegrb93/StarfallEx/issues/1295
 
 --@include ./sv_runtime.lua
 local runtime = dofile('./sv_runtime.lua')
@@ -19,7 +19,17 @@ for k in pairs(getScripts()) do
 end
 assert(path)
 e2:compile('csgo_caseopener.txt', getScripts()[path], true)
-e2:build_persist_defaults({
+e2:setup_inputs({
+	--EGP = 'wirelink',
+	--EGP2 = 'wirelink', -- unused
+	User = 'entity',
+})
+e2:setup_outputs({
+	X = 'number',
+	Y = 'number',
+	Kage = 'string',
+})
+e2:setup_persist_defaults({
 	O = 'number',
 	Time = 'number',
 	Array = 'array',
@@ -51,4 +61,8 @@ e2:build_persist_defaults({
 })
 e2:run_first()
 
+end, function(err, st)
+	timer.simple(0, function()
+		printConsole(st)
+	end)
 end)

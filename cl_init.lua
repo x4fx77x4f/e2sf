@@ -1,4 +1,5 @@
 --@name Expression 2 emulator
+--@includedata ./LICENSE
 
 --@include ./cl_egp3.lua
 dofile('./cl_egp3.lua')
