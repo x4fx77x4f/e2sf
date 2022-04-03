@@ -5,8 +5,8 @@
 
 timer.simple(0, function() -- Work around https://github.com/thegrb93/StarfallEx/issues/1295
 
---@include ./runtime.lua
-local runtime = dofile('./runtime.lua')
+--@include ./sv_runtime.lua
+local runtime = dofile('./sv_runtime.lua')
 
 local e2 = runtime:new()
 e2:build_environment()
