@@ -58,7 +58,6 @@ end
 function runtime:unwrap(wrapped)
 	return self.unwrapped[wrapped]
 end
-
 function runtime:new_clk(name, default)
 	local data = {
 		_enabled = not not default,
@@ -67,15 +66,6 @@ function runtime:new_clk(name, default)
 	self.clk[name] = data
 	return data
 end
-function runtime:run_clk(name)
-	local data = self.clk[data]
-	if data._enabled then
-		data._running = true
-		self:run_main()
-		data._running = false
-	end
-end
-
 function runtime:build_environment()
 	local env = {}
 	if self then
@@ -148,13 +138,36 @@ function runtime:compile(path, func, main)
 	end
 	return func
 end
-
-function runtime:run_main()
-	self:run(self.includes[self.mainfile])
+function runtime.xpcall_callback(err, st)
+	if type(err) == 'table' then
+		err = err.message
+	end
+	err = tostring(err)
+	st = st or debug.traceback(err, 2)
+	return err, st
 end
-
-function runtime:run(func)
-	func()
+function runtime:run(func, ...)
+	local retvals = {xpcall(func, self.xpcall_callback, ...)}
+	if not retvals[1] then
+		print("### E2SF runtime error ###\n"..retvals[3])
+		self.ready = false
+	end
+	return unpack(retvals)
+end
+function runtime:run_main()
+	return self:run(self.includes[self.mainfile])
+end
+function runtime:run_clk(name)
+	local data = self.clk[name]
+	if data._enabled then
+		data._running = true
+		self:run_main()
+		data._running = false
+	end
+end
+function runtime:run_first()
+	self.ready = true
+	return self:run_clk('first')
 end
 
 -- Datatypes

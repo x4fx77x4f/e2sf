@@ -19,7 +19,6 @@ for k in pairs(getScripts()) do
 end
 assert(path)
 e2:compile('csgo_caseopener.txt', getScripts()[path], true)
-e2.ready = true
-e2:run_main()
+e2:run_first()
 
 end)
