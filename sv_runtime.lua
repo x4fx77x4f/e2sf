@@ -121,6 +121,20 @@ function runtime:build_environment()
 	
 	return env
 end
+function runtime:build_persist_defaults(tbl)
+	local env = self.env
+	for k, vt in pairs(tbl) do
+		local v
+		if vt == 'number' then
+			v = 0
+		elseif vt == 'string' then
+			v = ''
+		else
+			v = self.types[vt]:new_default()
+		end
+		self.env[k] = v
+	end
+end
 
 function runtime:compile(path, func, main)
 	if type(func) == 'string' then

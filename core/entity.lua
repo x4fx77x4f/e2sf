@@ -1,5 +1,9 @@
 return function(instance, env)
 	local entity_meta = instance:new_type("entity", "e")
+	local NULL = entity(-1)
+	function entity_meta:new_default()
+		return instance:wrap(NULL, entity_meta)
+	end
 	local entity_methods = entity_meta.__index
 	local function getent(wrapped, allow_invalid)
 		local unwrapped = instance:unwrap(wrapped, entity_meta)
@@ -21,7 +25,6 @@ return function(instance, env)
 		self = getent(self, true)
 		return isValid(self) and tostring(self) or "(null)"
 	end
-	local NULL = entity(-1)
 	entity_meta.NULL = NULL
 	
 	function env.entity(entindex)

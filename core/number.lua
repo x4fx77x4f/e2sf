@@ -1,6 +1,9 @@
 return function(instance, env)
 	-- This is not a normal type. Normal Lua numbers are used instead of wrappers.
 	local number_meta = instance:new_type("number", "n")
+	function number_meta:new_default()
+		return 0
+	end
 	local number_methods = number_meta.__index
 	
 	local pi = math.pi
