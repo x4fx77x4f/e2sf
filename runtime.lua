@@ -11,7 +11,6 @@ runtime.__index = runtime
 function runtime:new(identifier)
 	local obj = {
 		includes = {},
-		timers = {},
 		types = {},
 		unwrapped = setmetatable({}, {__mode='k'}),
 		wrapped = setmetatable({}, {__mode='v'}),
