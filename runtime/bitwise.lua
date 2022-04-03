@@ -1,4 +1,4 @@
-return function(self, env)
+return function(instance, env)
 	env.bAnd = bit.band
 	env.bOr = bit.bor
 	env.bXor = bit.bxor
@@ -6,7 +6,7 @@ return function(self, env)
 	env.bShl = bit.blshift
 	local bit_bnot = bit.bnot
 	function env.bNot(n, bits)
-		if not bits then
+		if bits == nil then
 			return bit_bnot(n)
 		elseif bits >= 32 or bits < 1 then
 			return (-1)-n

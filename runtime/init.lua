@@ -13,9 +13,68 @@ function runtime:new(identifier)
 		includes = {},
 		timers = {},
 		types = {},
+		unwrapped = setmetatable({}, {__mode='k'}),
+		wrapped = setmetatable({}, {__mode='v'}),
+		entity = chip and chip() or nil,
+		owner = owner and owner() or nil,
+		ready = false,
+		clk = {},
 	}
 	obj.identifier = identifier or table.address(obj)
 	return setmetatable(obj, self or runtime)
+end
+
+runtime.print_prefix_color = Color(255, 63, 63)
+runtime.print_prefix = string.format("[%s] ", chip():entIndex())
+runtime.print_color = Color(152, 212, 255)
+function runtime:print_target(ply, ...)
+	if ply == self.owner then
+		print(self.print_prefix_color, self.print_prefix, self.print_color, ...)
+		return true
+	end
+	return pcall(printHud, ply, self.print_prefix_color, self.print_prefix, self.print_color, ...)
+end
+
+function runtime:new_type(name)
+	local msg = string.format("attempt to index a %s value", name)
+	local meta = {
+		__index = {},
+		__newindex = function(self, k, v)
+			return error(name)
+		end,
+		__metatable = name,
+	}
+	self.types[name] = meta
+	return meta
+end
+function runtime:wrap(unwrapped, meta)
+	local wrapped = self.wrapped[unwrapped]
+	if not wrapped then
+		wrapped = setmetatable({}, meta)
+		self.unwrapped[wrapped] = unwrapped
+		self.unwrapped[unwrapped] = wrapped
+	end
+	return wrapped
+end
+function runtime:unwrap(wrapped)
+	return self.unwrapped[wrapped]
+end
+
+function runtime:new_clk(name, default)
+	local data = {
+		_enabled = not not default,
+		_running = false,
+	}
+	self.clk[name] = data
+	return data
+end
+function runtime:run_clk(name)
+	local data = self.clk[data]
+	if data._enabled then
+		data._running = true
+		self:run_main()
+		data._running = false
+	end
 end
 
 function runtime:build_environment()
@@ -51,14 +110,32 @@ function runtime:build_environment()
 		error("TODO")
 	end
 	
-	function env._nop() end -- Bare expressions are okay in E2, so we need this to deal with them.
+	-- Bare expressions are okay in E2, so we need this to deal with them.
+	function env._nop() end
 	
+	-- Methods can be used on nil values in E2, and string methods may be impossible to implement normally, so we need to allow methods to be obtained in another way.
+	function env._method(name, k)
+		return self.types[name].__index[k]
+	end
+	
+	local hooks = {}
+	-- Vanilla
 	--@include ./array.lua
-	require('./array.lua')(self, env)
+	require('./array.lua')(self, env, hooks)
 	--@include ./bitwise.lua
-	require('./bitwise.lua')(self, env)
+	require('./bitwise.lua')(self, env, hooks)
+	--@include ./constraint.lua
+	require('./constraint.lua')(self, env, hooks)
+	--@include ./entity.lua
+	require('./entity.lua')(self, env, hooks)
 	--@include ./timer.lua
-	require('./timer.lua')(self, env)
+	require('./timer.lua')(self, env, hooks)
+	-- Extensions
+	--@include ./moneyrequest_tylerb.lua
+	require('./moneyrequest_tylerb.lua')(self, env, hooks)
+	for k=1, #hooks do
+		hooks[k]()
+	end
 	
 	return env
 end

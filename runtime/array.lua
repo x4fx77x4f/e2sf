@@ -1,12 +1,7 @@
-return function(self, env)
-	local array = {}
-	self.types.array = array
-	array.__index = {}
-	function array:new(...)
-		return setmetatable({...}, self or array)
-	end
+return function(instance, env)
+	local array_meta = instance:new_type("array", "a")
 	
 	function env.array(...)
-		return array:new(...)
+		return instance:wrap({...}, array_meta)
 	end
 end
