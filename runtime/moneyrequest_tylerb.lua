@@ -156,9 +156,9 @@ return function(instance, env, post)
 		function entity_methods:money()
 			self = getent(self)
 			if self:isPlayer() then
-				return self:getClass() == 'spawned_money' and self:getAmount() or 0
+				return math.floor(self:getMoney() or 0)
 			end
-			return math.floor(self:getMoney() or 0)
+			return self:getClass() == 'spawned_money' and self:getAmount() or 0
 		end
 		entity_methods.moneyAmount = entity_methods.money
 	end)
