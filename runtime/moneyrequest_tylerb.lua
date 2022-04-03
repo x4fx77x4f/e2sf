@@ -8,6 +8,10 @@ return function(instance, env, post)
 		local getent = entity_meta.getent
 		local NULL = entity_meta.NULL
 		
+		local function checkfinite(n)
+			return n == n and n ~= math.huge and n ~= -math.huge
+		end
+		
 		local moneyClk = instance:new_clk('money')
 		function env.moneyClk(str)
 			if str and str ~= moneyClk.title then
@@ -66,7 +70,7 @@ return function(instance, env, post)
 			local asker = instance.owner
 			ply = getent(ply, true)
 			if (
-				amount == 0/0 or
+				not checkfinite(amount) or
 				not isValid(ply) or
 				not ply:isPlayer() or
 				not isValid(asker) or
@@ -118,7 +122,7 @@ return function(instance, env, post)
 		end
 		function env.moneyGive(ply, amount)
 			local giver = instance.owner
-			if amount == 0/0 then
+			if not checkfinite(amount) then
 				return 0
 			end
 			if not instance.allowgive then
