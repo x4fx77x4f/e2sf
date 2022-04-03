@@ -47,6 +47,9 @@ return function(instance, env)
 			net.writeDouble(duration)
 		net.send(instance.owner)
 	end
+	--function env.printTable(arr) end
+	--function env.printColor(arr, ...) end
+	--function env.printColorC(arr, ...) end
 	
 	return function()
 		local entity_meta = instance.types.entity
@@ -99,5 +102,6 @@ return function(instance, env)
 			net.send(driver)
 			return 1
 		end
+		--function entity_methods:printColorDriver(arr, ...) end
 	end
 end
