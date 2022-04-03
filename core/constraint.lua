@@ -3,8 +3,6 @@ return function(instance, env, post)
 		local entity_meta = instance.types.entity
 		local entity_methods = entity_meta.__index
 		local getent = entity_meta.getent
-		--local getphys = entity_meta.getphys
-		--local NULL = entity_meta.NULL
 		
 		--function entity_methods:getConstraints() end
 		--function entity_methods:getConnectedEntities(filters, ...) end

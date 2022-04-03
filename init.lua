@@ -1,7 +1,7 @@
 --@name Expression 2 emulator
 --@server
---@include ./cl_egp3.lua
---@clientmain ./cl_egp3.lua
+--@include ./cl_init.lua
+--@clientmain ./cl_init.lua
 
 timer.simple(0, function() -- Work around https://github.com/thegrb93/StarfallEx/issues/1295
 
