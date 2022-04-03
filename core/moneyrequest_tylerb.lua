@@ -2,7 +2,7 @@
 return function(instance, env, post)
 	instance.maxreq = false
 	instance.allowgive = true
-	table.insert(post, function()
+	return function()
 		local entity_meta = instance.types.entity
 		local entity_methods = entity_meta.__index
 		local getent = entity_meta.getent
@@ -165,5 +165,5 @@ return function(instance, env, post)
 			return self:getClass() == 'spawned_money' and self:getAmount() or 0
 		end
 		entity_methods.moneyAmount = entity_methods.money
-	end)
+	end
 end

@@ -1,5 +1,5 @@
 return function(instance, env, post)
-	table.insert(post, function()
+	return function()
 		local entity_meta = instance.types.entity
 		local entity_methods = entity_meta.__index
 		local getent = entity_meta.getent
@@ -18,5 +18,5 @@ return function(instance, env, post)
 		--function entity_methods:parent() end
 		--function entity_methods:parentBone() end
 		--function entity_methods:children() end
-	end)
+	end
 end

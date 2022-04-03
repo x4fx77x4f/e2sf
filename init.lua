@@ -3,8 +3,8 @@
 --@include ./cl_egp3.lua
 --@clientmain ./cl_egp3.lua
 
---@include ./runtime/init.lua
-local runtime = dofile('./runtime/init.lua')
+--@include ./runtime.lua
+local runtime = dofile('./runtime.lua')
 
 local e2 = runtime:new()
 e2:build_environment()

@@ -25,7 +25,7 @@ function runtime:new(identifier)
 end
 
 runtime.print_prefix_color = Color(255, 63, 63)
-runtime.print_prefix = string.format("[%s] ", chip():entIndex())
+runtime.print_prefix = string.format("[%s] ", chip and chip():entIndex() or "nil")
 runtime.print_color = Color(152, 212, 255)
 function runtime:print_target(ply, ...)
 	if ply == self.owner then
@@ -119,20 +119,13 @@ function runtime:build_environment()
 	end
 	
 	local hooks = {}
-	-- Vanilla
-	--@include ./array.lua
-	require('./array.lua')(self, env, hooks)
-	--@include ./bitwise.lua
-	require('./bitwise.lua')(self, env, hooks)
-	--@include ./constraint.lua
-	require('./constraint.lua')(self, env, hooks)
-	--@include ./entity.lua
-	require('./entity.lua')(self, env, hooks)
-	--@include ./timer.lua
-	require('./timer.lua')(self, env, hooks)
-	-- Extensions
-	--@include ./moneyrequest_tylerb.lua
-	require('./moneyrequest_tylerb.lua')(self, env, hooks)
+	--@includedir ./core/
+	for path, func in pairs(dodir('./core/')) do
+		local hook = func(self, env)
+		if hook then
+			table.insert(hooks, hook)
+		end
+	end
 	for k=1, #hooks do
 		hooks[k]()
 	end
