@@ -8,9 +8,11 @@ local WireEGP_50_WireGPU_ConsoleFont = render.createFont(
 	false
 ) -- https://github.com/wiremod/wire/blob/a031e4d/lua/entities/gmod_wire_egp/lib/objects/text.lua#L43
 local mat = material.load
+local EGP = {Objects={Names={}}}
 local tbl = {
+	-- [[
 	{
-		--ID = EGP.Objects.Names["Box"],
+		ID = EGP.Objects.Names["Box"],
 		Settings = {
 			x = 256,
 			y = 256,
@@ -24,7 +26,7 @@ local tbl = {
 		}
 	},
 	{
-		--ID = EGP.Objects.Names["Text"],
+		ID = EGP.Objects.Names["Text"],
 		Settings = {
 			x = 256,
 			y = 256,
@@ -39,6 +41,21 @@ local tbl = {
 			a = 255
 		}
 	},
+	--]]
+	--[[
+	{ID=EGP.Objects.Names["Box"],Settings={x=256,y=256,w=362,h=362,material=true,angle=135,r=75,g=75,b=200,a=255}},
+	{ID=EGP.Objects.Names["Box"],Settings={x=256,y=256,w=340,h=340,material=true,angle=135,r=10,g=10,b=10,a=255}},
+	{ID=EGP.Objects.Names["Text"],Settings={x=229,y=28,text="E",size=100,fontid=4,r=200,g=50,b=50,a=255}},
+	{ID=EGP.Objects.Names["Text"],Settings={x=50,y=200,text="G",size=100,fontid=4,r=200,g=50,b=50,a=255}},
+	{ID=EGP.Objects.Names["Text"],Settings={x=400,y=200,text="P",size=100,fontid=4,r=200,g=50,b=50,a=255}},
+	{ID=EGP.Objects.Names["Text"],Settings={x=228,y=375,text="2",size=100,fontid=4,r=200,g=50,b=50,a=255}},
+	{ID=EGP.Objects.Names["Box"],Settings={x=256,y=256,w=256,h=256,material=mat("expression 2/cog"),angle=45,r=255,g=50,b=50,a=255}},
+	{ID=EGP.Objects.Names["Box"],Settings={x=128,y=241,w=256,h=30,material=true,r=10,g=10,b=10,a=255}},
+	{ID=EGP.Objects.Names["Box"],Settings={x=241,y=128,w=30,h=256,material=true,r=10,g=10,b=10,a=255}},
+	{ID=EGP.Objects.Names["Circle"],Settings={x=256,y=256,w=70,h=70,material=true,r=255,g=50,b=50,a=255}},
+	{ID=EGP.Objects.Names["Box"],Settings={x=256,y=256,w=362,h=362,material=mat("gui/center_gradient"),angle=135,r=75,g=75,b=200,a=75}},
+	{ID=EGP.Objects.Names["Box"],Settings={x=256,y=256,w=362,h=362,material=mat("gui/center_gradient"),angle=135,r=75,g=75,b=200,a=75}}
+	--]]
 } -- https://github.com/wiremod/wire/blob/a031e4d/lua/entities/gmod_wire_egp/lib/egplib/objectcontrol.lua#L248
 local mtx = Matrix()
 local scale = Vector(1, 1)
@@ -49,13 +66,20 @@ hook.add('render', '', function()
 	mtx:setScale(scale)
 	sw, sh = 512, 512
 	render.pushMatrix(mtx)
-		local t1s = tbl[1].Settings
-		render.setMaterial(t1s.material)
-		render.setRGBA(t1s.r, t1s.g, t1s.b, t1s.a)
-		render.drawTexturedRect(t1s.x-t1s.w/2, t1s.y-t1s.h/2, t1s.w, t1s.h)
-		local t2s = tbl[2].Settings
-		render.setFont(WireEGP_50_WireGPU_ConsoleFont)
-		render.setRGBA(t2s.r, t2s.g, t2s.b, t2s.a)
-		render.drawSimpleText(t2s.x, t2s.y, t2s.text, t2s.halign, t2s.valign)
+		for k, v in ipairs(tbl) do
+			v = v.Settings
+			render.setRGBA(v.r, v.g, v.b, v.a)
+			if v.material then
+				if v.material == true then
+					render.drawRect(v.x-v.w/2, v.y-v.h/2, v.w, v.h)
+				else
+					render.setMaterial(v.material)
+					render.drawTexturedRect(v.x-v.w/2, v.y-v.h/2, v.w, v.h)
+				end
+			elseif v.text then
+				render.setFont(WireEGP_50_WireGPU_ConsoleFont)
+				render.drawSimpleText(v.x, v.y, v.text, v.halign, v.valign)
+			end
+		end
 	render.popMatrix()
 end)
