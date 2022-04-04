@@ -1,4 +1,5 @@
 --@name Expression 2 emulator
+--@model models/beer/wiremod/gate_e2.mdl
 --@server
 --@include ./cl_init.lua
 --@clientmain ./cl_init.lua
