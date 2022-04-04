@@ -1,5 +1,5 @@
 # E2SF
-E2SF is an [Expression 2](https://github.com/wiremod/wire/wiki/Expression-2) to Lua transpiler, and a [StarfallEx](https://github.com/thegrb93/StarfallEx)-based runtime for running transpiled E2 code. It is currently extremely incomplete and not usable for anything.
+E2SF will be a [Expression 2](https://github.com/wiremod/wire/wiki/Expression-2) to Lua transpiler, and is currently a [StarfallEx](https://github.com/thegrb93/StarfallEx)-based runtime for running transpiled E2 code. It is currently in extremely early stages and not usable for very much.
 
 ## Warning
 **This software is provided as is without warranty of any kind.** While an effort has been made to reduce the chance of bad things happening as a result of this software, absolutely no guarantees are made as to its safety. In particular, while this software was written with the intent of not allowing Lua injection in compiled code, for the runtime to be a secure sandbox, and for ran code to behave the same as it would natively, I cannot guarantee that any of those claims are true. By using this software, you accept the risk of potentially being adversely affected by potential flaws.
