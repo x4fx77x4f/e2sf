@@ -18,6 +18,8 @@ function runtime:new(identifier)
 		owner = owner and owner() or nil,
 		ready = false,
 		clk = {},
+		inputs = {},
+		outputs = {},
 	}
 	obj.identifier = identifier or table.address(obj)
 	return setmetatable(obj, self or runtime)
@@ -72,6 +74,23 @@ function runtime:build_environment()
 		self.env = env
 	end
 	env._G = env
+	
+	-- Directives
+	function env._persist(tbl)
+		return self:setup_persist_defaults(tbl)
+	end
+	function env._name(name) end
+	function env._author(author) end
+	function env._trigger(tbl) end
+	function env._model(path) end
+	function env._autoupdate() end
+	function env._strict() end
+	function env._inputs(tbl)
+		return self:setup_inputs(tbl)
+	end
+	function env._outputs(tbl)
+		return self:setup_outputs(tbl)
+	end
 	
 	-- Basic syntax
 	function env._switch(var, cases, ...)
@@ -150,7 +169,7 @@ function runtime:setup_outputs_fake(outputs)
 	return self:setup_persist_defaults(outputs)
 end
 
-function runtime:compile(path, func, main)
+function runtime:add_precompiled(path, func, main)
 	if type(func) == 'string' then
 		local err
 		func, err = loadstring(func, string.format("%s:%s", self.identifier, path))
