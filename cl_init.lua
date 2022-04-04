@@ -1,9 +1,6 @@
 --@name Expression 2 emulator
 --@includedata ./LICENSE
 
---@include ./cl_egp3.lua
-dofile('./cl_egp3.lua')
-
 local print_prefix_color = Color(255, 63, 63)
 local print_prefix = string.format("[%s] ", chip():entIndex())
 local print_color = Color(152, 212, 255)
@@ -24,4 +21,14 @@ net.receive('name', function(length)
 	local name_len = net.readUInt(8)
 	local name = net.readData(name_len)
 	setName(name_prefix..name)
+end)
+
+--@include ./cl_egp3.lua
+local egp = dofile('./cl_egp3.lua')
+local screen = egp.new(chip():getLinkedComponents()[1])
+hook.add('render', '', function()
+	local ent = render.getScreenEntity()
+	if ent == screen.entity then
+		screen:draw()
+	end
 end)
