@@ -21,6 +21,14 @@ return function(instance, env)
 	function env.exit()
 		error("exit")
 	end
+	function env.error(reason)
+		error(reason, 2)
+	end
+	function env.assert(condition, reason)
+		if condition == 0 then
+			error(reason or "assert failed", 2)
+		end
+	end
 	--function env.reset() end
 	--function env.ops() end
 	--function env.opcounter() end

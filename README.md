@@ -15,7 +15,7 @@ E2SF will be an [Expression 2](https://github.com/wiremod/wire/wiki/Expression-2
 - `array`: 1/1/?: Basically zero
 - `bitwise`: 0/7/7: Complete but untested
 - `constraint`: 1/1/?: Basically zero
-- `core`: 0/7/?: No quota, `reset`, or `inputClk`
+- `core`: 0/9/?: No quota, `reset`, or `inputClk`
 - `debug`: 0/5/?: Partial but untested, no `printTable` or `printColor`
 - `egp`: 0/0/79: Zero
 - `entity`: 1/42/?: Nearly complete but untested
