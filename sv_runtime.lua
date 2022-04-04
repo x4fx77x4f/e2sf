@@ -20,6 +20,7 @@ function runtime:new(identifier)
 		clk = {},
 		inputs = {},
 		outputs = {},
+		triggers = {},
 	}
 	obj.identifier = identifier or table.address(obj)
 	return setmetatable(obj, self or runtime)
@@ -79,12 +80,17 @@ function runtime:build_environment()
 	function env._persist(tbl)
 		return self:setup_persist_defaults(tbl)
 	end
-	function env._name(name) end
-	function env._author(author) end
-	function env._trigger(tbl) end
+	function env._name(name)
+		return self:set_name(name)
+	end
+	function env._trigger(tbl)
+		return self:setup_trigger(tbl)
+	end
 	function env._model(path) end
 	function env._autoupdate() end
-	function env._strict() end
+	function env._strict()
+		self.strict = true
+	end
 	function env._inputs(tbl)
 		return self:setup_inputs(tbl)
 	end
@@ -140,19 +146,13 @@ function runtime:build_environment()
 	
 	return env
 end
-function runtime:setup_persist_defaults(tbl)
-	local env = self.env
-	for k, vt in pairs(tbl) do
-		local v
-		if vt == 'number' then
-			v = 0
-		elseif vt == 'string' then
-			v = ''
-		else
-			v = self.types[vt]:new_default()
-		end
-		self.env[k] = v
-	end
+
+function runtime:set_name(name)
+	self.name = name
+	net.start('name')
+		net.writeUInt(#name, 8)
+		net.writeData(name, #name)
+	net.send()
 end
 function runtime:setup_inputs(inputs)
 	self.inputs = inputs
@@ -167,6 +167,23 @@ function runtime:setup_outputs(outputs)
 end
 function runtime:setup_outputs_fake(outputs)
 	return self:setup_persist_defaults(outputs)
+end
+function runtime:setup_persist_defaults(tbl)
+	local env = self.env
+	for k, vt in pairs(tbl) do
+		local v
+		if vt == 'number' then
+			v = 0
+		elseif vt == 'string' then
+			v = ''
+		else
+			v = self.types[vt]:new_default()
+		end
+		self.env[k] = v
+	end
+end
+function runtime:setup_trigger(triggers)
+	self.triggers = triggers
 end
 
 function runtime:add_precompiled(path, func, main)

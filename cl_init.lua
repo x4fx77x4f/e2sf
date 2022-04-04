@@ -16,10 +16,11 @@ net.receive('print', function(length)
 	local text = net.readData(text_len)
 	pcall(printMessage, message_type, print_prefix..text)
 end)
+local name = "generic"
 local name_prefix = string.format("%s ]\n[ ", chip():getChipName())
 net.receive('name', function(length)
 	local name_len = net.readUInt(8)
-	local name = net.readData(name_len)
+	name = net.readData(name_len)
 	setName(name_prefix..name)
 end)
 
