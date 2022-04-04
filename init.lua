@@ -19,47 +19,7 @@ for k in pairs(getScripts()) do
 	end
 end
 assert(path)
-e2:compile('csgo_caseopener.txt', getScripts()[path], true)
-e2:setup_inputs({
-	--EGP = 'wirelink',
-	--EGP2 = 'wirelink', -- unused
-	User = 'entity',
-})
-e2:setup_outputs({
-	X = 'number',
-	Y = 'number',
-	Kage = 'string',
-})
-e2:setup_persist_defaults({
-	O = 'number',
-	Time = 'number',
-	Array = 'array',
-	Temp = 'number',
-	PriceArray = 'array',
-	Player = 'entity',
-	SideA = 'number',
-	SideB = 'number',
-	Money = 'number',
-	MoneyOld = 'number',
-	BaseHeight = 'number',
-	ABlock = 'number',
-	BBlock = 'number',
-	CBlock = 'number',
-	DBlock = 'number',
-	Speed = 'number',
-	Random = 'number',
-	KeyPrice = 'number',
-	First = 'number',
-	AItem = 'string',
-	AMaterial = 'string',
-	BItem = 'string',
-	BMaterial = 'string',
-	CItem = 'string',
-	CMaterial = 'string',
-	DItem = 'string',
-	DMaterial = 'string',
-	Paid = 'number',
-})
+e2:add_precompiled('csgo_caseopener.txt', getScripts()[path], true)
 e2:run_first()
 
 end, function(err, st)
