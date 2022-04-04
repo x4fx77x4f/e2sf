@@ -11,15 +11,16 @@ local runtime = dofile('./sv_runtime.lua')
 
 local e2 = runtime:new()
 e2:build_environment()
---@includedata ./expression2/csgo_caseopener.lua
-local path
-for k in pairs(getScripts()) do
-	if string.find(k, '/csgo_caseopener%.lua$') then
-		path = k
+--@includedir ./expression2/
+local path, code = '/e2sf_test.lua'
+for k, v in pairs(getScripts()) do
+	if string.sub(k, -#path) == path then
+		path = string.gsub(path, '^/', '')
+		path = string.gsub(path, '%.lua$', '.txt')
+		code = v
 	end
 end
-assert(path)
-e2:add_precompiled('csgo_caseopener.txt', getScripts()[path], true)
+e2:add_precompiled(path, code, true)
 e2:run_first()
 
 end, function(err, st)
