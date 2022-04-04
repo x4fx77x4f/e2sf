@@ -5,10 +5,12 @@ return function(instance, env)
 		return instance:wrap(NULL, wirelink_meta)
 	end
 	local wirelink_methods = wirelink_meta.__index
-	local function getwl(wrapped)
+	local function getwl(wrapped, allow_invalid)
 		local unwrapped = instance:unwrap(wrapped, entity_meta)
 		if isValid(unwrapped) and unwrapped:entity():getOwner() == instance.owner then
 			return unwrapped
+		elseif not allow_invalid then
+			error("Invalid wirelink!", 3)
 		end
 	end
 	wirelink_meta.getwl = getwl
@@ -38,7 +40,7 @@ return function(instance, env)
 		local entity_methods = entity_meta.__index
 		
 		function wirelink_methods:entity()
-			self = getwl(self)
+			self = getwl(self, true)
 			return instance:wrap(isValid(self) and self or entity_meta.NULL, entity_meta)
 		end
 	end

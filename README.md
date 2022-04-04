@@ -17,6 +17,7 @@ E2SF is an [Expression 2](https://github.com/wiremod/wire/wiki/Expression-2) to 
 - `constraint`: 1/1/?
 - `core`: 0/7/?
 - `debug`: 0/5/?
+- `egp`: 0/79/?
 - `entity`: 1/42/?
 - `number`: 0/67/?
 - `sound`: 0/7/?
