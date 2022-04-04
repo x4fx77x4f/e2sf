@@ -11,7 +11,7 @@ local runtime = dofile('./sv_runtime.lua')
 
 local e2 = runtime:new()
 e2:build_environment()
---@includedir ./expression2/
+--@includedir ./precompiled/
 local path, code = '/e2sf_test.lua'
 for k, v in pairs(getScripts()) do
 	if string.sub(k, -#path) == path then

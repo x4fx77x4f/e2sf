@@ -1,0 +1,15 @@
+@strict
+@name E2SF test
+@inputs EGP:wirelink User:entity A
+@outputs B
+@persist N S:string
+if (first()) {
+    print("N", N)
+    print("S", S)
+    print("A", A)
+    print("B", B)
+    B = A
+    interval(100)
+} elseif (clk()) {
+    print("clkName()", clkName())
+}
